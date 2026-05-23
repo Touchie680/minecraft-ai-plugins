@@ -16,11 +16,19 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
 
+      # Dynamically finds and builds the plugin inside any generated project folder
       - name: Build with Maven
-        run: mvn clean package
+        run: |
+          POM_PATH=$(find . -name "pom.xml" -print -quit)
+          if [ -z "$POM_PATH" ]; then
+            echo "Error: No pom.xml project configuration file found in the repository!"
+            exit 1
+          fi
+          cd $(dirname "$POM_PATH")
+          mvn clean package
 
       - name: Upload Finished Jar
         uses: actions/upload-artifact@v4
         with:
           name: compiled-minecraft-plugin
-          path: target/*.jar
+          path: "**/target/*.jar"
