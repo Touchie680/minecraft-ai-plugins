@@ -4,6 +4,8 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -11,7 +13,7 @@ jobs:
       - name: Set up Java JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21' # Updated to match Minecraft 1.21.4+ requirements
           distribution: 'zulu'
 
       - name: Build with Maven
